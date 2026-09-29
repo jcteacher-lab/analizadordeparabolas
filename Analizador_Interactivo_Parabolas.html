@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analizador Interactivo de Parábolas</title>
+  <style>
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f3f6fa;
+      color: #17202a
+    }
+
+    header {
+      background: #172b4d;
+      color: #fff;
+      padding: 18px 24px
+    }
+
+    header h1 {
+      margin: 0 0 6px;
+      font-size: 25px
+    }
+
+    header p {
+      margin: 0;
+      opacity: .9;
+      font-size: 14px
+    }
+
+    main {
+      max-width: 1400px;
+      margin: auto;
+      padding: 18px
+    }
+
+    .panel {
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 3px 12px #00000012
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      color: #172b4d
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 2.2fr 1fr 1fr 1.2fr;
+      gap: 12px;
+      align-items: end
+    }
+
+    label {
+      font-weight: bold;
+      font-size: 13px;
+      display: block;
+      margin-bottom: 4px
+    }
+
+    input,
+    button {
+      font: inherit
+    }
+
+    input[type=text],
+    input[type=number] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #b9c3d0;
+      border-radius: 7px
+    }
+
+    input[type=text]:focus,
+    input[type=number]:focus {
+      outline: 2px solid #1769aa55;
+      border-color: #1769aa
+    }
+
+    button {
+      padding: 10px 14px;
+      border: 0;
+      border-radius: 7px;
+      background: #1769aa;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold
+    }
+
+    button:hover {
+      filter: brightness(.93)
+    }
+
+    button.sec {
+      background: #e8eef6;
+      color: #173a5e
+    }
+
+    .hint {
+      font-size: 12.5px;
+      color: #5d6875;
+      margin-top: 10px;
+      line-height: 1.5
+    }
+
+    .hint code {
+      background: #eef3f9;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12.5px
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(520px, 2fr) minmax(320px, 1fr);
+      gap: 16px
+    }
+
+    #graph {
+      width: 100%;
+      height: 640px;
+      border: 1px solid #ccd5df;
+      border-radius: 10px;
+      background: #fff;
+      display: block;
+      cursor: grab;
+      touch-action: none
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px
+    }
+
+    .card {
+      background: #f7f9fc;
+      border-left: 4px solid #1769aa;
+      padding: 11px;
+      border-radius: 7px;
+      font-size: 14px
+    }
+
+    .card b {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 12.5px;
+      color: #41556b;
+      text-transform: uppercase;
+      letter-spacing: .3px
+    }
+
+    .formula {
+      font-family: Georgia, serif;
+      font-size: 23px;
+      background: #eef5ff;
+      padding: 14px;
+      border-radius: 8px;
+      text-align: center
+    }
+
+    .explain {
+      line-height: 1.6;
+      font-size: 14.5px
+    }
+
+    .explain p {
+      margin: 8px 0
+    }
+
+    .good {
+      background: #edf8ef;
+      border-left: 4px solid #2e8b57;
+      padding: 10px 12px;
+      border-radius: 7px;
+      margin-bottom: 10px
+    }
+
+    .warn {
+      background: #fff7e6;
+      border-left: 4px solid #d98c00;
+      padding: 10px 12px;
+      border-radius: 7px;
+      margin-bottom: 10px
+    }
+
+    .ident {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 10px 0
+    }
+
+    .pill {
+      background: #172b4d;
+      color: #fff;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: bold
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+      font-size: 14px
+    }
+
+    th,
+    td {
+      padding: 8px;
+      border: 1px solid #d7dee7;
+      text-align: center
+    }
+
+    th {
+      background: #edf2f7;
+      font-size: 13px
+    }
+
+    tr.vertexrow td {
+      background: #ffe9e9;
+      font-weight: bold;
+      color: #b71c1c
+    }
+
+    .scroll {
+      overflow: auto;
+      max-height: 420px
+    }
+
+    .small {
+      font-size: 13px;
+      color: #5d6875
+    }
+
+    .sliders {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px
+    }
+
+    .sliderbox {
+      background: #f7f9fc;
+      padding: 12px;
+      border-radius: 8px
+    }
+
+    .sliderbox b {
+      font-size: 15px
+    }
+
+    input[type=range] {
+      width: 100%;
+      margin-top: 8px;
+      accent-color: #1769aa
+    }
+
+    .rowbtns {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 12px;
+      flex-wrap: wrap
+    }
+
+    footer {
+      text-align: center;
+      color: #697586;
+      font-size: 12px;
+      padding: 15px
+    }
+
+    @media(max-width:900px) {
+
+      .controls,
+      .grid {
+        grid-template-columns: 1fr
+      }
+
+      #graph {
+        height: 460px
+      }
+
+      .sliders {
+        grid-template-columns: 1fr
+      }
+
+      .cards {
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Analizador Interactivo de Parábolas</h1>
+    <p>Traslación del vértice, raíces, foco, directriz, lado recto y tabla de valores — y = a(x − h)² + k</p>
+  </header>
+
+  <main>
+
+    <section class="panel">
+      <div class="controls">
+        <div>
+          <label for="eq">Ecuación &nbsp;y =</label>
+          <input id="eq" type="text" value="(x+3)^2+2" placeholder="Ejemplo: (x+3)^2+2" autocomplete="off">
+        </div>
+        <div>
+          <label for="xmin">X mínimo</label>
+          <input id="xmin" type="number" value="-12" step="1">
+        </div>
+        <div>
+          <label for="xmax">X máximo</label>
+          <input id="xmax" type="number" value="12" step="1">
+        </div>
+        <div>
+          <button id="analyze">Analizar parábola</button>
+        </div>
+      </div>
+      <div class="rowbtns">
+        <button id="refit" class="sec">Reajustar vista</button>
+        <span class="small">Rueda del ratón = zoom · Arrastrar sobre la gráfica = desplazar</span>
+      </div>
+      <div class="hint">
+        Formatos admitidos: <code>(x+3)^2+2</code> · <code>2(x-1)^2-4</code> · <code>-(x-2)^2+3</code> ·
+        <code>1/2(x+1)^2-2</code> · <code>x^2</code> · <code>x^2-4x+1</code> (forma general)
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="sliders">
+        <div class="sliderbox">
+          <b>a = <span id="av">1</span></b>
+          <input id="as" type="range" min="-4" max="4" step="0.1" value="1">
+          <div class="small">Apertura y sentido</div>
+        </div>
+        <div class="sliderbox">
+          <b>h = <span id="hv">-3</span></b>
+          <input id="hs" type="range" min="-10" max="10" step="0.1" value="-3">
+          <div class="small">Desplazamiento horizontal</div>
+        </div>
+        <div class="sliderbox">
+          <b>k = <span id="kv">2</span></b>
+          <input id="ks" type="range" min="-10" max="10" step="0.1" value="2">
+          <div class="small">Desplazamiento vertical</div>
+        </div>
+      </div>
+      <p class="small" style="margin-bottom:0">Los controles modifican directamente la parábola: observa cómo se mueve
+        el vértice V(h, k).</p>
+    </section>
+
+    <div class="grid">
+      <section class="panel" style="padding:10px">
+        <canvas id="graph"></canvas>
+      </section>
+
+      <section>
+        <div class="panel">
+          <h2>Forma de vértice</h2>
+          <div id="formula" class="formula">y = (x + 3)² + 2</div>
+        </div>
+
+        <div class="panel">
+          <h2>Interpretación de la traslación</h2>
+          <div id="explanation" class="explain"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Elementos principales</h2>
+          <div id="cards" class="cards"></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2>Tabla de valores</h2>
+      <div class="scroll">
+        <table id="table"></table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Interpretación geométrica: foco, directriz y lado recto</h2>
+      <div id="geometry" class="explain"></div>
+    </section>
+
+  </main>
+
+  <footer>Herramienta educativa — análisis de parábolas en forma de vértice · sin librerías externas</footer>
+
+  <script>
+    /* ============================================================
+       1. UTILIDADES
+       ============================================================ */
+    const NUM = '\\d+(?:\\.\\d+)?(?:\\/\\d+(?:\\.\\d+)?)?';
+
+    function fmt(n, dec) {
+      if (!isFinite(n)) return '∞';
+      if (Math.abs(n) < 1e-10) n = 0;
+      const d = (dec === undefined) ? 3 : dec;
+      return String(Number(n.toFixed(d)));
+    }
+    function sgn(n) {
+      const s = fmt(n);
+      return s.charAt(0) === '-' ? '−' + s.slice(1) : s;
+    }
+    function niceStep(span, target) {
+      const raw = span / target;
+      if (!isFinite(raw) || raw <= 0) return 1;
+      const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+      const n = raw / mag;
+      let s;
+      if (n <= 1) s = 1;
+      else if (n <= 2) s = 2;
+      else if (n <= 2.5) s = 2.5;
+      else if (n <= 5) s = 5;
+      else s = 10;
+      return s * mag;
+    }
+    function decimalsFor(step) {
+      const s = String(step);
+      const m = s.match(/e-(\d+)/i);
+      if (m) return parseInt(m[1], 10);
+      const i = s.indexOf('.');
+      return i < 0 ? 0 : (s.length - i - 1);
+    }
+
+    /* ============================================================
+       2. LECTURA DE LA ECUACIÓN
+       ============================================================ */
+    function numFromToken(t) {
+      if (t === undefined || t === null) return 1;
+      t = t.trim();
+      if (t === '' || t === '+') return 1;
+      if (t === '-') return -1;
+      let sign = 1;
+      if (t.charAt(0) === '-') {sign = -1; t = t.slice(1);}
+      else if (t.charAt(0) === '+') {t = t.slice(1);}
+      let v;
+      if (t.indexOf('/') >= 0) {
+        const parts = t.split('/');
+        v = parseFloat(parts[0]) / parseFloat(parts[1]);
+      } else {
+        v = parseFloat(t);
+      }
+      return sign * (isFinite(v) ? v : NaN);
+    }
+
+    function parseEquation(raw) {
+      let s = String(raw == null ? '' : raw).trim().toLowerCase();
+      if (!s) throw new Error('Escribe una ecuación. Por ejemplo: (x+3)^2+2');
+      s = s.replace(/\s+/g, '')
+        .replace(/[−–—]/g, '-')
+        .replace(/²/g, '^2')
+        .replace(/[∗·]/g, '*');
+      s = s.replace(/^y=/, '');
+      if (!s) throw new Error('Falta el segundo miembro de la ecuación.');
+
+      const reV = new RegExp(
+        '^([+-]?(?:' + NUM + ')?)\\*?\\(x([+-]' + NUM + ')?\\)\\^2(?:([+-]' + NUM + ')?)?$'
+      );
+      let m = s.match(reV);
+      if (m) {
+        let a = numFromToken(m[1]);
+        if (!isFinite(a)) a = 1;
+        const h = (m[2] !== undefined) ? -numFromToken(m[2]) : 0;
+        const k = (m[3] !== undefined) ? numFromToken(m[3]) : 0;
+        if (Math.abs(a) < 1e-9) throw new Error('El coeficiente "a" no puede ser 0.');
+        return {a: a, h: h, k: k};
+      }
+
+      const reG = new RegExp(
+        '^([+-]?(?:' + NUM + ')?)\\*?x\\^2([+-](?:' + NUM + ')?\\*?x)?([+-]' + NUM + ')?$'
+      );
+      m = s.match(reG);
+      if (m) {
+        let a = numFromToken(m[1]);
+        if (!isFinite(a)) a = 1;
+        let b = 0, c = 0;
+        if (m[2] !== undefined) b = numFromToken(m[2].replace(/\*?x$/, ''));
+        if (m[3] !== undefined) c = numFromToken(m[3]);
+        if (Math.abs(a) < 1e-9) throw new Error('El coeficiente de x² no puede ser 0.');
+        const h = -b / (2 * a);
+        const k = c - (b * b) / (4 * a);
+        return {a: a, h: h, k: k};
+      }
+
+      throw new Error('No se pudo interpretar la ecuación.\nUsa la forma a(x-h)^2+k (ej.: (x+3)^2+2) o la forma ax^2+bx+c (ej.: x^2-4x+1).');
+    }
+
+    /* ============================================================
+       3. TEXTO BONITO DE LA ECUACIÓN
+       ============================================================ */
+    function eqBody(a, h, k) {
+      const inner = (Math.abs(h) < 1e-9)
+        ? 'x²'
+        : '(x ' + (h > 0 ? '− ' + fmt(h) : '+ ' + fmt(-h)) + ')²';
+      let s;
+      if (Math.abs(a - 1) < 1e-9) s = inner;
+      else if (Math.abs(a + 1) < 1e-9) s = '−' + inner;
+      else s = fmt(a) + inner;
+      if (Math.abs(k) > 1e-9) s += ' ' + (k > 0 ? '+ ' + fmt(k) : '− ' + fmt(-k));
+      return s;
+    }
+    function equationText(a, h, k) {return 'y = ' + eqBody(a, h, k);}
+
+    /* ============================================================
+       4. ESTADO
+       ============================================================ */
+    let P = {a: 1, h: -3, k: 2};
+    const view = {
+      xmin: -12, xmax: 12,
+      ymin: -10, ymax: 10,
+      autoX: true,   // auto-encuadre completo (X e Y) sobre los puntos clave
+      autoY: true    // sólo auto-encuadre vertical (usado cuando el usuario fija X)
+    };
+
+    /* ============================================================
+       5. REFERENCIAS AL DOM
+       ============================================================ */
+    const eqInput = document.getElementById('eq');
+    const xminInp = document.getElementById('xmin');
+    const xmaxInp = document.getElementById('xmax');
+    const aSlider = document.getElementById('as');
+    const hSlider = document.getElementById('hs');
+    const kSlider = document.getElementById('ks');
+    const av = document.getElementById('av');
+    const hv = document.getElementById('hv');
+    const kv = document.getElementById('kv');
+    const canvas = document.getElementById('graph');
+    const ctx = canvas.getContext('2d');
+
+    /* ============================================================
+       6. SINCRONIZACIÓN DE CONTROLES
+       ============================================================ */
+    function fitSliderTo(sl, v) {
+      const mn = parseFloat(sl.min), mx = parseFloat(sl.max);
+      if (v < mn) sl.min = String(Math.floor(v - 1));
+      if (v > mx) sl.max = String(Math.ceil(v + 1));
+    }
+    function syncSliders() {
+      fitSliderTo(aSlider, P.a);
+      fitSliderTo(hSlider, P.h);
+      fitSliderTo(kSlider, P.k);
+      aSlider.value = P.a;
+      hSlider.value = P.h;
+      kSlider.value = P.k;
+      av.textContent = fmt(P.a);
+      hv.textContent = fmt(P.h);
+      kv.textContent = fmt(P.k);
+    }
+
+    /* ============================================================
+       7. CÁLCULOS DERIVADOS
+       ============================================================ */
+    function roots() {
+      const D = -P.k / P.a;
+      if (D < 0) return [];
+      const r = Math.sqrt(D);
+      return [P.h - r, P.h + r];
+    }
+
+    /* ============================================================
+       8. AUTO-ENCUADRE OPTIMIZADO (NUEVO)
+       ------------------------------------------------------------
+       En lugar de muestrear toda la parábola (que dispara el rango
+       en parabolas muy abiertas), encuadramos sobre los PUNTOS CLAVE:
+         · vértice V(h, k)
+         · foco F(h, k + 1/(4a))
+         · directriz y = k − 1/(4a)
+         · extremos del lado recto (h ± 1/(2a), k + 1/(4a))
+         · raíces reales (si existen)
+       Se fija una mitad mínima de X e Y para que aun cuando todo esté
+       muy agrupado (|a| grande), los puntos se vean con buen tamaño.
+       ============================================================ */
+    function autoFitView() {
+      const a = P.a, h = P.h, k = P.k;
+      const p = 1 / (4 * a);
+      const fy = k + p;
+      const dirY = k - p;
+      const lrHalf = Math.abs(1 / (2 * a));
+      const e1 = h - lrHalf, e2 = h + lrHalf;
+      const rs = roots();
+
+      /* Coordenadas clave en X y en Y */
+      const xs = [h, e1, e2];
+      const ys = [k, fy, dirY];
+      rs.forEach(r => {xs.push(r); ys.push(0);});
+
+      const xlo = Math.min.apply(null, xs);
+      const xhi = Math.max.apply(null, xs);
+      const ylo = Math.min.apply(null, ys);
+      const yhi = Math.max.apply(null, ys);
+
+      const cx = (xlo + xhi) / 2;
+      const cy = (ylo + yhi) / 2;
+
+      /* Mitades iniciales basadas en los puntos clave */
+      let xhalf = (xhi - xlo) / 2;
+      let yhalf = (yhi - ylo) / 2;
+
+      /* Mitades mínimas: garantizan visibilidad de cada elemento */
+      const minXhalf = Math.max(lrHalf * 2.5, 3);          // lado recto y su entorno
+      const minYhalf = Math.max(Math.abs(p) * 2.5, 2.5);   // separación vértice–foco–directriz
+
+      if (xhalf < minXhalf) xhalf = minXhalf;
+      if (yhalf < minYhalf) yhalf = minYhalf;
+
+      /* Un pelín de aire extra */
+      xhalf *= 1.2;
+      yhalf *= 1.2;
+
+      view.xmin = cx - xhalf;
+      view.xmax = cx + xhalf;
+      view.ymin = cy - yhalf;
+      view.ymax = cy + yhalf;
+
+      /* Sincronizamos los inputs de X para que reflejen la vista real */
+      xminInp.value = Number(view.xmin.toFixed(2));
+      xmaxInp.value = Number(view.xmax.toFixed(2));
+    }
+
+    /* Auto-encuadre SOLO de Y, respetando el rango X fijado por el usuario */
+    function fitYToX() {
+      const a = P.a, h = P.h, k = P.k;
+      const xmin = view.xmin, xmax = view.xmax;
+      const p = 1 / (4 * a);
+      const fy = k + p;
+      const dirY = k - p;
+
+      /* Muestreamos la parábola sólo dentro del rango X visible */
+      let lo = Infinity, hi = -Infinity;
+      for (let i = 0; i <= 200; i++) {
+        const x = xmin + (xmax - xmin) * i / 200;
+        const y = a * (x - h) * (x - h) + k;
+        if (y < lo) lo = y;
+        if (y > hi) hi = y;
+      }
+      lo = Math.min(lo, k, fy, dirY);
+      hi = Math.max(hi, k, fy, dirY);
+
+      const rs = roots();
+      rs.forEach(r => {
+        if (r >= xmin && r <= xmax) {
+          if (0 < lo) lo = 0;
+          if (0 > hi) hi = 0;
+        }
+      });
+
+      if (!isFinite(lo) || !isFinite(hi)) {lo = k - 5; hi = k + 5;}
+
+      let span = hi - lo;
+      if (span < 2) span = 2;
+      const xspan = Math.abs(xmax - xmin) || 24;
+      const maxSpan = 3 * xspan;
+      if (span > maxSpan) span = maxSpan;
+
+      const cy = (lo + hi) / 2;
+      const pad = span * 0.15;
+      view.ymin = cy - span / 2 - pad;
+      view.ymax = cy + span / 2 + pad;
+    }
+
+    /* ============================================================
+       9. DIBUJO DE LA GRÁFICA
+       ============================================================ */
+    function draw() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      const W = Math.max(320, Math.round(rect.width));
+      const H = Math.max(260, Math.round(rect.height));
+      canvas.width = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+
+      /* ---- NUEVO: un solo flag decide el auto-encuadre ---- */
+      if (view.autoX) {
+        autoFitView();
+      } else if (view.autoY) {
+        fitYToX();
+      }
+
+      const L = 58, R = W - 16, T = 16, B = H - 32;
+      const pw = R - L, ph = B - T;
+      const xmin = view.xmin, xmax = view.xmax, ymin = view.ymin, ymax = view.ymax;
+
+      const sx = x => L + (x - xmin) / (xmax - xmin) * pw;
+      const sy = y => B - (y - ymin) / (ymax - ymin) * ph;
+
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#fbfcfe'; ctx.fillRect(L, T, pw, ph);
+
+      const xstep = niceStep(xmax - xmin, 10);
+      const ystep = niceStep(ymax - ymin, 8);
+      const dx = decimalsFor(xstep), dy = decimalsFor(ystep);
+
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = '#e6ebf2';
+      const ix0 = Math.ceil(xmin / xstep), ix1 = Math.floor(xmax / xstep);
+      for (let i = ix0; i <= ix1; i++) {
+        const px = sx(i * xstep);
+        ctx.beginPath(); ctx.moveTo(px, T); ctx.lineTo(px, B); ctx.stroke();
+      }
+      const iy0 = Math.ceil(ymin / ystep), iy1 = Math.floor(ymax / ystep);
+      for (let j = iy0; j <= iy1; j++) {
+        const py = sy(j * ystep);
+        ctx.beginPath(); ctx.moveTo(L, py); ctx.lineTo(R, py); ctx.stroke();
+      }
+
+      ctx.strokeStyle = '#65758b'; ctx.lineWidth = 1.6;
+      if (xmin <= 0 && xmax >= 0) {
+        const px = sx(0);
+        ctx.beginPath(); ctx.moveTo(px, T); ctx.lineTo(px, B); ctx.stroke();
+      }
+      if (ymin <= 0 && ymax >= 0) {
+        const py = sy(0);
+        ctx.beginPath(); ctx.moveTo(L, py); ctx.lineTo(R, py); ctx.stroke();
+      }
+
+      ctx.font = '11px Arial, sans-serif';
+      ctx.fillStyle = '#5b6b7c';
+      ctx.textAlign = 'center';
+      for (let i = ix0; i <= ix1; i++) {
+        const x = i * xstep;
+        if (Math.abs(x) < 1e-9) continue;
+        ctx.fillText(x.toFixed(dx), sx(x), B + 15);
+      }
+      ctx.textAlign = 'right';
+      for (let j = iy0; j <= iy1; j++) {
+        const y = j * ystep;
+        if (Math.abs(y) < 1e-9) continue;
+        ctx.fillText(y.toFixed(dy), L - 6, sy(y) + 4);
+      }
+      if (xmin <= 0 && xmax >= 0 && ymin <= 0 && ymax >= 0) {
+        ctx.textAlign = 'right';
+        ctx.fillText('0', sx(0) - 6, sy(0) + 14);
+      }
+
+      const a = P.a, h = P.h, k = P.k;
+      const p = 1 / (4 * a);
+      const fy = k + p;
+      const dirY = k - p;
+      const lrHalf = Math.abs(1 / (2 * a));
+      const e1 = h - lrHalf, e2 = h + lrHalf;
+      const rs = roots();
+
+      ctx.save();
+      ctx.beginPath(); ctx.rect(L, T, pw, ph); ctx.clip();
+
+      /* Directriz */
+      if (dirY >= ymin && dirY <= ymax) {
+        ctx.setLineDash([7, 5]);
+        ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.8;
+        ctx.beginPath(); ctx.moveTo(L, sy(dirY)); ctx.lineTo(R, sy(dirY)); ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      /* Eje de simetría */
+      if (h >= xmin && h <= xmax) {
+        ctx.setLineDash([7, 5]);
+        ctx.strokeStyle = '#8b5cf6'; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.moveTo(sx(h), T); ctx.lineTo(sx(h), B); ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      /* Lado recto */
+      ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 3.5;
+      ctx.beginPath(); ctx.moveTo(sx(e1), sy(fy)); ctx.lineTo(sx(e2), sy(fy)); ctx.stroke();
+
+      /* Parábola */
+      ctx.strokeStyle = '#1769aa'; ctx.lineWidth = 3;
+      ctx.beginPath();
+      const steps = Math.max(200, Math.round(pw));
+      for (let i = 0; i <= steps; i++) {
+        const x = xmin + (xmax - xmin) * i / steps;
+        const y = a * (x - h) * (x - h) + k;
+        const px = sx(x), py = sy(y);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      /* Raíces resaltadas */
+      rs.forEach(r => {
+        if (r >= xmin && r <= xmax) {
+          const px = sx(r), py = sy(0);
+          ctx.fillStyle = 'rgba(46, 125, 50, 0.10)';
+          ctx.beginPath(); ctx.arc(px, py, 22, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = 'rgba(46, 125, 50, 0.18)';
+          ctx.beginPath(); ctx.arc(px, py, 14, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = 'rgba(46, 125, 50, 0.32)';
+          ctx.beginPath(); ctx.arc(px, py, 9, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#2e7d32';
+          ctx.beginPath(); ctx.arc(px, py, 6, 0, Math.PI * 2); ctx.fill();
+          ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2; ctx.stroke();
+        }
+      });
+
+      /* Extremos del lado recto */
+      [e1, e2].forEach(xe => {
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath(); ctx.arc(sx(xe), sy(fy), 5, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.6; ctx.stroke();
+      });
+
+      /* Foco */
+      ctx.fillStyle = '#d97706';
+      ctx.beginPath(); ctx.arc(sx(h), sy(fy), 7, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+
+      /* Vértice */
+      ctx.fillStyle = '#c62828';
+      ctx.beginPath(); ctx.arc(sx(h), sy(k), 8, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+
+      ctx.restore();
+
+      /* --- etiquetas --- */
+      function label(text, x, y, color) {
+        ctx.font = 'bold 12px Arial, sans-serif';
+        const w = ctx.measureText(text).width;
+        let lx = Math.min(Math.max(x, L + 2), R - w - 4);
+        const ly = Math.min(Math.max(y, T + 14), B - 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.92)';
+        ctx.fillRect(lx - 4, ly - 13, w + 8, 17);
+        ctx.strokeStyle = color; ctx.lineWidth = 1;
+        ctx.strokeRect(lx - 4, ly - 13, w + 8, 17);
+        ctx.fillStyle = color;
+        ctx.textAlign = 'left';
+        ctx.fillText(text, lx, ly);
+      }
+      function labelGreen(text, x, y) {
+        ctx.font = 'bold 12px Arial, sans-serif';
+        const w = ctx.measureText(text).width;
+        let lx = Math.min(Math.max(x, L + 4), R - w - 6);
+        const ly = Math.min(Math.max(y, T + 16), B - 6);
+        ctx.fillStyle = '#2e7d32';
+        ctx.fillRect(lx - 5, ly - 13, w + 10, 18);
+        ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5;
+        ctx.strokeRect(lx - 5, ly - 13, w + 10, 18);
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'left';
+        ctx.fillText(text, lx, ly);
+      }
+
+      label('V(' + fmt(h) + ', ' + fmt(k) + ')', sx(h) + 11, sy(k) - 12, '#c62828');
+
+      if (fy >= ymin && fy <= ymax) {
+        label('F(' + fmt(h) + ', ' + fmt(fy) + ')', sx(h) + 11, sy(fy) + 20, '#d97706');
+      }
+      if (dirY >= ymin && dirY <= ymax) {
+        label('Directriz y = ' + fmt(dirY), L + 6, sy(dirY) - 8, '#d97706');
+      }
+      if (h >= xmin && h <= xmax) {
+        label('Eje x = ' + fmt(h), sx(h) + 6, T + 14, '#8b5cf6');
+      }
+      rs.forEach(r => {
+        if (r >= xmin && r <= xmax) {
+          labelGreen('R(' + fmt(r) + ', 0)', sx(r) + 14, sy(0) - 16);
+        }
+      });
+
+      ctx.textAlign = 'left';
+      ctx.font = 'bold 13px Arial, sans-serif';
+      ctx.fillStyle = '#1769aa';
+      ctx.fillText('Parábola', R - 82, T + 18);
+    }
+
+    /* ============================================================
+       10. RENDER: PANELES + GRÁFICA
+       ============================================================ */
+    function render() {
+      const a = P.a, h = P.h, k = P.k;
+
+      const p = 1 / (4 * a);
+      const fy = k + p;
+      const dirY = k - p;
+      const lrHalf = Math.abs(1 / (2 * a));
+      const e1 = h - lrHalf, e2 = h + lrHalf;
+      const lrLen = Math.abs(1 / a);
+      const rs = roots();
+
+      document.getElementById('formula').textContent = equationText(a, h, k);
+
+      const innerTxt = (Math.abs(h) < 1e-9)
+        ? 'x²'
+        : '(x ' + (h > 0 ? '− ' + fmt(h) : '+ ' + fmt(-h)) + ')²';
+
+      let expH;
+      if (Math.abs(h) < 1e-9) {
+        expH = 'No hay desplazamiento horizontal: el eje de simetría es <b>x = 0</b>.';
+      } else if (h < 0) {
+        expH = 'Dentro del paréntesis aparece <b>x + ' + fmt(-h) + '</b>, que es lo mismo que ' +
+          '<b>x − (' + sgn(h) + ')</b>. Por eso <b>h = ' + sgn(h) + '</b>: el vértice se desplaza ' +
+          '<b>' + fmt(-h) + ' unidades hacia la IZQUIERDA</b>.';
+      } else {
+        expH = 'Dentro del paréntesis aparece <b>x − ' + fmt(h) + '</b>, así que <b>h = ' + sgn(h) + '</b>: ' +
+          'el vértice se desplaza <b>' + fmt(h) + ' unidades hacia la DERECHA</b>.';
+      }
+
+      let expK;
+      if (Math.abs(k) < 1e-9) {
+        expK = 'No hay desplazamiento vertical: el vértice queda sobre el eje X.';
+      } else if (k > 0) {
+        expK = 'Fuera del paréntesis aparece <b>+ ' + fmt(k) + '</b>, es decir <b>k = ' + sgn(k) + '</b>: ' +
+          'el vértice se desplaza <b>' + fmt(k) + ' unidades hacia ARRIBA</b>.';
+      } else {
+        expK = 'Fuera del paréntesis aparece <b>− ' + fmt(-k) + '</b>, es decir <b>k = ' + sgn(k) + '</b>: ' +
+          'el vértice se desplaza <b>' + fmt(-k) + ' unidades hacia ABAJO</b>.';
+      }
+
+      let expA;
+      if (a > 0) {
+        expA = 'Como <b>a = ' + fmt(a) + ' &gt; 0</b>, la parábola abre <b>hacia arriba</b> (∪) y el vértice es un <b>mínimo</b>.';
+      } else {
+        expA = 'Como <b>a = ' + fmt(a) + ' &lt; 0</b>, la parábola abre <b>hacia abajo</b> (∩) y el vértice es un <b>máximo</b>.';
+      }
+      const ancho = Math.abs(a) > 1
+        ? 'Al ser |a| &gt; 1, la parábola es más <b>estrecha</b> que y = x².'
+        : (Math.abs(a) < 1
+          ? 'Al ser |a| &lt; 1, la parábola es más <b>ancha</b> que y = x².'
+          : 'Como |a| = 1, la parábola tiene la misma apertura que y = x².');
+
+      document.getElementById('explanation').innerHTML =
+        '<div class="good"><b>Identificación:</b> a = ' + sgn(a) + ' &nbsp;·&nbsp; h = ' + sgn(h) +
+        ' &nbsp;·&nbsp; k = ' + sgn(k) + ' &nbsp;→&nbsp; V(' + fmt(h) + ', ' + fmt(k) + ')</div>' +
+        '<div class="ident">' +
+        '<span class="pill">y = ' + eqBody(a, h, k) + '</span>' +
+        '<span class="pill">Forma: y = a(x − h)² + k</span>' +
+        '</div>' +
+        '<p>Comparando con la forma de vértice <b>y = a(x − h)² + k</b>, en <b>' + innerTxt + '</b> ' +
+        'el valor de <b>h</b> fija el desplazamiento horizontal y el valor de <b>k</b> fija el desplazamiento vertical.</p>' +
+        '<p><b>Desplazamiento horizontal.</b> ' + expH + '</p>' +
+        '<p><b>Desplazamiento vertical.</b> ' + expK + '</p>' +
+        '<p><b>Apertura.</b> ' + expA + ' ' + ancho + '</p>';
+
+      const rootsText = rs.length
+        ? rs.map(r => '(' + fmt(r) + ', 0)').join(' &nbsp;y&nbsp; ')
+        : '<span style="color:#b71c1c">No existen raíces reales</span>';
+
+      document.getElementById('cards').innerHTML =
+        '<div class="card"><b>Vértice</b>V(' + fmt(h) + ', ' + fmt(k) + ')</div>' +
+        '<div class="card"><b>Eje de simetría</b>x = ' + fmt(h) + '</div>' +
+        '<div class="card"><b>Apertura</b>' + (a > 0 ? 'Hacia arriba (∪)' : 'Hacia abajo (∩)') + '</div>' +
+        '<div class="card"><b>Parámetro p</b>' + fmt(p) + '</div>' +
+        '<div class="card"><b>Foco</b>F(' + fmt(h) + ', ' + fmt(fy) + ')</div>' +
+        '<div class="card"><b>Directriz</b>y = ' + fmt(dirY) + '</div>' +
+        '<div class="card"><b>Raíces</b>' + rootsText + '</div>' +
+        '<div class="card"><b>Longitud lado recto</b>' + fmt(lrLen) + ' u.</div>' +
+        '<div class="card"><b>Extremo 1 del lado recto</b>(' + fmt(e1) + ', ' + fmt(fy) + ')</div>' +
+        '<div class="card"><b>Extremo 2 del lado recto</b>(' + fmt(e2) + ', ' + fmt(fy) + ')</div>';
+
+      document.getElementById('geometry').innerHTML =
+        '<p><b>Parámetro p = ' + fmt(p) + '.</b> Es la distancia dirigida del vértice al foco: ' +
+        'p = 1/(4a) = 1/(4·' + fmt(a) + ') = ' + fmt(p) + '. Su valor absoluto es |p| = ' + fmt(Math.abs(p)) + '.</p>' +
+        '<p><b>Foco:</b> F(' + fmt(h) + ', ' + fmt(fy) + '). Está ' + fmt(Math.abs(p)) + ' unidades ' +
+        (p > 0 ? 'por encima' : 'por debajo') + ' del vértice, sobre el eje de simetría x = ' + fmt(h) + '.</p>' +
+        '<p><b>Directriz:</b> la recta horizontal y = ' + fmt(dirY) + '. Cada punto de la parábola equidista del foco y de esta recta.</p>' +
+        '<p><b>Lado recto:</b> segmento perpendicular al eje de simetría que pasa por el foco. ' +
+        'Su longitud es |4p| = 1/|a| = <b>' + fmt(lrLen) + '</b> unidades.</p>' +
+        '<p><b>Extremos del lado recto:</b> (' + fmt(e1) + ', ' + fmt(fy) + ') &nbsp;y&nbsp; (' + fmt(e2) + ', ' + fmt(fy) + ').</p>' +
+        '<p class="small">Comprobación: la distancia del vértice al foco es |p| = ' + fmt(Math.abs(p)) +
+        ' y la distancia del vértice a la directriz también es |p| = ' + fmt(Math.abs(p)) + '.</p>';
+
+      let rows = '<thead><tr><th>x</th><th>x − h</th><th>(x − h)²</th><th>y = a(x − h)² + k</th></tr></thead><tbody>';
+      for (let i = -5; i <= 5; i++) {
+        const x = h + i;
+        const d = x - h;
+        const y = a * d * d + k;
+        const esVertice = Math.abs(d) < 1e-9;
+        rows += '<tr' + (esVertice ? ' class="vertexrow"' : '') + '>' +
+          '<td>' + fmt(x) + '</td>' +
+          '<td>' + fmt(d) + '</td>' +
+          '<td>' + fmt(d * d) + '</td>' +
+          '<td>' + fmt(y) + (esVertice ? ' ← vértice' : '') + '</td>' +
+          '</tr>';
+      }
+      rows += '</tbody>';
+      document.getElementById('table').innerHTML = rows;
+
+      draw();
+    }
+
+    /* ============================================================
+       11. ACCIONES
+       ============================================================ */
+    function analyze() {
+      try {
+        P = parseEquation(eqInput.value);
+        syncSliders();
+        view.autoX = true;
+        view.autoY = true;
+        render();
+      } catch (err) {
+        alert('⚠️ ' + err.message);
+      }
+    }
+
+    function updateFromSliders() {
+      let a = parseFloat(aSlider.value);
+      if (Math.abs(a) < 0.05) {
+        a = (a < 0) ? -0.1 : 0.1;
+        aSlider.value = a;
+      }
+      P = {
+        a: a,
+        h: parseFloat(hSlider.value),
+        k: parseFloat(kSlider.value)
+      };
+      syncSliders();
+      eqInput.value = eqBody(P.a, P.h, P.k);
+      view.autoX = true;
+      view.autoY = true;
+      render();
+    }
+
+    /* ============================================================
+       12. EVENTOS
+       ============================================================ */
+    document.getElementById('analyze').addEventListener('click', analyze);
+
+    eqInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {e.preventDefault(); analyze();}
+    });
+
+    [aSlider, hSlider, kSlider].forEach(s => s.addEventListener('input', updateFromSliders));
+
+    document.getElementById('refit').addEventListener('click', () => {
+      view.autoX = true;
+      view.autoY = true;
+      render();
+    });
+
+    /* El usuario fija el rango X → respetamos su X, auto-ajustamos Y */
+    function applyXRange() {
+      let xmin = parseFloat(xminInp.value);
+      let xmax = parseFloat(xmaxInp.value);
+      if (!isFinite(xmin)) xmin = -12;
+      if (!isFinite(xmax)) xmax = 12;
+      if (xmax <= xmin) {xmax = xmin + 1; xmaxInp.value = xmax;}
+      view.xmin = xmin;
+      view.xmax = xmax;
+      view.autoX = false;
+      view.autoY = true;
+      draw();
+    }
+    xminInp.addEventListener('change', applyXRange);
+    xmaxInp.addEventListener('change', applyXRange);
+
+    /* Zoom: desactiva ambos automatismos */
+    canvas.addEventListener('wheel', e => {
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const L = 58, R = rect.width - 16, T = 16, B = rect.height - 32;
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const px = Math.min(Math.max(mx, L), R);
+      const py = Math.min(Math.max(my, T), B);
+
+      const xData = view.xmin + (px - L) / (R - L) * (view.xmax - view.xmin);
+      const yData = view.ymax - (py - T) / (B - T) * (view.ymax - view.ymin);
+
+      const f = e.deltaY > 0 ? 1.12 : 1 / 1.12;
+
+      view.xmin = xData - (xData - view.xmin) * f;
+      view.xmax = xData + (view.xmax - xData) * f;
+      view.ymin = yData - (yData - view.ymin) * f;
+      view.ymax = yData + (view.ymax - yData) * f;
+      view.autoX = false;
+      view.autoY = false;
+
+      xminInp.value = Number(view.xmin.toFixed(2));
+      xmaxInp.value = Number(view.xmax.toFixed(2));
+      draw();
+    }, {passive: false});
+
+    /* Arrastre: desactiva ambos automatismos */
+    let dragging = null;
+    canvas.addEventListener('mousedown', e => {
+      dragging = {x: e.clientX, y: e.clientY, v: {xmin: view.xmin, xmax: view.xmax, ymin: view.ymin, ymax: view.ymax}};
+      canvas.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      const rect = canvas.getBoundingClientRect();
+      const L = 58, R = rect.width - 16, T = 16, B = rect.height - 32;
+      const pw = R - L, ph = B - T;
+      const dx = (e.clientX - dragging.x) / pw * (dragging.v.xmax - dragging.v.xmin);
+      const dy = (e.clientY - dragging.y) / ph * (dragging.v.ymax - dragging.v.ymin);
+
+      view.xmin = dragging.v.xmin - dx;
+      view.xmax = dragging.v.xmax - dx;
+      view.ymin = dragging.v.ymin + dy;
+      view.ymax = dragging.v.ymax + dy;
+      view.autoX = false;
+      view.autoY = false;
+
+      xminInp.value = Number(view.xmin.toFixed(2));
+      xmaxInp.value = Number(view.xmax.toFixed(2));
+      draw();
+    });
+    window.addEventListener('mouseup', () => {
+      dragging = null;
+      canvas.style.cursor = 'grab';
+    });
+
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(draw, 80);
+    });
+
+    /* ============================================================
+       13. ARRANQUE
+       ============================================================ */
+    syncSliders();
+    view.xmin = parseFloat(xminInp.value);
+    view.xmax = parseFloat(xmaxInp.value);
+    analyze();
+  </script>
+</body>
+
+</html>
