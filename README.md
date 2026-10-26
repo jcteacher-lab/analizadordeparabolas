@@ -3,6 +3,7 @@
 > Herramienta didáctica e interactiva para el estudio de la parábola en su forma de vértice $y = a(x-h)^2 + k$, implementada íntegramente en un único archivo HTML, sin dependencias externas.
 ---
 https://jcteacher-lab.github.io/analizadordeparabolas/
+
 ## Índice
 
 1. [Descripción general](#1-descripción-general)
