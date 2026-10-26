@@ -122,19 +122,19 @@ Existen raíces reales si y solo si $\dfrac{k}{a} \leq 0$, es decir, si el vért
 
 ## 4. Características de la aplicación
 
-- ✅ Entrada de ecuaciones en **forma de vértice** y **forma general**.
-- ✅ Identificación automática de $a$, $h$ y $k$.
-- ✅ **Gráfica cartesiana** en `<canvas>` con zoom (rueda del ratón), paneo (arrastre) y rejilla adaptativa.
-- ✅ **Auto-encuadre** centrado en los elementos notables, de modo que vértice, foco, directriz y extremos del lado recto siempre son visibles.
-- ✅ **Vértice** marcado y etiquetado.
-- ✅ **Eje de simetría** como línea punteada.
-- ✅ **Foco** y **directriz** con colores diferenciados.
-- ✅ **Raíces** resaltadas con halos y etiquetas verdes cuando existen.
-- ✅ **Lado recto** dibujado como segmento horizontal que pasa por el foco, con sus **extremos** marcados.
-- ✅ **Deslizadores** para modificar $a$, $h$ y $k$ en tiempo real.
-- ✅ Panel de **interpretación pedagógica** de la traslación horizontal y vertical.
-- ✅ **Tabla de valores** alrededor del vértice (11 puntos).
-- ✅ **Sin dependencias externas**: un solo archivo `.html`.
+-  Entrada de ecuaciones en **forma de vértice** y **forma general**.
+-  Identificación automática de $a$, $h$ y $k$.
+-  **Gráfica cartesiana** en `<canvas>` con zoom (rueda del ratón), paneo (arrastre) y rejilla adaptativa.
+-  **Auto-encuadre** centrado en los elementos notables, de modo que vértice, foco, directriz y extremos del lado recto siempre son visibles.
+-  **Vértice** marcado y etiquetado.
+-  **Eje de simetría** como línea punteada.
+-  **Foco** y **directriz** con colores diferenciados.
+-  **Raíces** resaltadas con halos y etiquetas verdes cuando existen.
+-  **Lado recto** dibujado como segmento horizontal que pasa por el foco, con sus **extremos** marcados.
+-  **Deslizadores** para modificar $a$, $h$ y $k$ en tiempo real.
+-  Panel de **interpretación pedagógica** de la traslación horizontal y vertical.
+-  **Tabla de valores** alrededor del vértice (11 puntos).
+-  **Sin dependencias externas**: un solo archivo `.html`.
 
 ---
 
