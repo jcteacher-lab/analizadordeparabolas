@@ -253,7 +253,8 @@ No requiere instalación. Basta con descargar el archivo y abrirlo en un navegad
 git clone https://github.com/jcteacher-lab/analizadordeparabolas.git
 cd analizadordeparabolas
 python3 -m http.server 8000
-# Abre http://localhost:8000
+# Abre en tu navegador:
+http://localhost:8000
 ```
 
 ---
