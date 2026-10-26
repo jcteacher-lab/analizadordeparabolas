@@ -27,6 +27,7 @@ https://jcteacher-lab.github.io/analizadordeparabolas/
 12. [Referencias](#12-referencias)
 13. [Licencia](#13-licencia)
 14. [Autor](#14-autor)
+15. [Proyectos relacionados](#15-proyectos-relacionados)
 
 ---
 
@@ -320,6 +321,17 @@ You should have received a copy of the GNU General Public License along with thi
 - GitHub: [@jcteacher-lab](https://github.com/jcteacher-lab)
 - Correo: juancarlos.santiago.cb161@dgeti.sems.gob.mx
 
+## 15. Proyectos relacionados
+
+- [Simulador de Tiro Parabólico](https://jcteacher-lab.github.io/tiroparabolico) —
+  Simulador educativo de movimiento de proyectiles con Canvas 2D.
+- [Analizador de parábolas](https://github.com/jcteacher-lab/analizadordeparabolas) —
+  Herramienta didáctica para explorar la parábola: cambia a, h y k con deslizadores y observa cómo se traslada el vértice.
+- [Graficador dinámico de parábolas](https://github.com/jcteacher-lab/Graficador_dinamico_parabolas) —
+  Simulador educativo que construye la **gráfica y la ecuación de una parábola** a partir de sus elementos geométricos.
+- [Simulator del sistema solar](https://github.com/jcteacher-lab/sistemasolar) —
+  Simulador interactivo del Sistema Solar en un único archivo HTML.
+  
 ---
 
  Si este proyecto te resultó útil, considera darle una estrella en GitHub.
