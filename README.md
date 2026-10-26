@@ -25,6 +25,7 @@ https://jcteacher-lab.github.io/analizadordeparabolas/
 11. [Posibles extensiones](#11-posibles-extensiones)
 12. [Referencias](#12-referencias)
 13. [Licencia](#13-licencia)
+14. [Autor](#14-autor)
 
 ---
 
@@ -200,7 +201,7 @@ La explicación mostrada es:
 
 ## 6. Arquitectura del código
 
-El archivo `Analizador_Interactivo_Parabolas.html` está organizado en 13 secciones numeradas dentro del bloque `<script>`.
+El archivo `index.html` está organizado en 13 secciones numeradas dentro del bloque `<script>`.
 
 <!-- Aquí puedes agregar la lista de las 13 secciones, por ejemplo:
 1. Constantes y utilidades
@@ -251,10 +252,8 @@ No requiere instalación. Basta con descargar el archivo y abrirlo en un navegad
 ```bash
 git clone https://github.com/jcteacher-lab/analizadordeparabolas.git
 cd analizadordeparabolas
-# Abrir el archivo con el navegador predeterminado
-xdg-open Analizador_Interactivo_Parabolas.html    # Linux
-open Analizador_Interactivo_Parabolas.html        # macOS
-start Analizador_Interactivo_Parabolas.html       # Windows
+python3 -m http.server 8000
+# Abre http://localhost:8000
 ```
 
 ---
@@ -312,3 +311,14 @@ This program is free software: you can redistribute it and/or modify it under th
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+## 14. Autor
+
+**MTI. Juan Carlos Santiago Sánchez**
+- GitHub: [@jcteacher-lab](https://github.com/jcteacher-lab)
+- Correo: juancarlos.santiago.cb161@dgeti.sems.gob.mx
+
+---
+
+ Si este proyecto te resultó útil, considera darle una estrella en GitHub.
+
